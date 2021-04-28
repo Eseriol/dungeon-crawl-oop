@@ -5,7 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Drawable;
 
 public abstract class Actor implements Drawable {
-    private CellType cellType;
+    private Skeleton skeleton;
     private Cell cell;
     private int health = 10;
 
