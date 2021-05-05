@@ -25,6 +25,10 @@ public abstract class Actor implements Drawable {
         }
     }
 
+    public void pickTheItem(){
+        
+    }
+
     public int getHealth() {
         return health;
     }
