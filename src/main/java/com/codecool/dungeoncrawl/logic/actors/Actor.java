@@ -18,7 +18,10 @@ public abstract class Actor implements Drawable {
         Cell nextCell = cell.getNeighbor(dx, dy);
         if (nextCell.getType() == CellType.WALL) {
             System.out.println("can't move!");
-        } else {
+        } else if (nextCell.getType() == CellType.DOOR){
+            System.out.println("I have to find a key first...");
+        }
+        else {
             cell.setActor(null);
             nextCell.setActor(this);
             cell = nextCell;
@@ -26,7 +29,7 @@ public abstract class Actor implements Drawable {
     }
 
     public void pickTheItem(){
-        
+
     }
 
     public int getHealth() {
