@@ -1,11 +1,13 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.actors.Skeleton;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -16,6 +18,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
+
+import java.util.ArrayList;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap();
@@ -55,8 +59,6 @@ public class Main extends Application {
         scene.setOnKeyPressed(this::onKeyPressed);
 
 
-
-
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
     }
@@ -81,11 +83,39 @@ public class Main extends Application {
                 break;
             case ENTER:
                 System.out.println(button);
+                Cell cellOfPlayer = map.getPlayer().getCell();
+                if (CellType.getItemsList().contains(cellOfPlayer.getType())) {
+                    cellOfPlayer.setEmptyTile();
+                }
                 refresh();
                 break;
             case SPACE:
                 System.out.println("spc pressed");
+                ArrayList<Cell> list = map.getPlayer().getCell().getNeighbors();
+                ArrayList<Cell> cellsWithMonsters = new ArrayList<>();
+                list.forEach(cell -> {
+                    if(CellType.monsterList().contains(cell.getType())){
+                        cellsWithMonsters.add(cell);
+                    }
+                });
+                if (cellsWithMonsters.size() > 0){
+                    fight(cellsWithMonsters.get(0), map.getPlayer());
+                }
+
                 refresh();
+                break;
+        }
+    }
+
+    private void fight(Cell enemyCell, Player playerCell) {
+        if (CellType.SKELETON == enemyCell.getType()){
+            System.out.println(enemyCell.toString());
+            Skeleton skeleton = new Skeleton(enemyCell);
+            while (skeleton.getShealth() > 0) {
+                skeleton.gotHit(playerCell.getDamage());
+            }
+            skeleton.getCell().setEmptyTile();
+            refresh();
         }
     }
 

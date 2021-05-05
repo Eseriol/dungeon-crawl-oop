@@ -8,6 +8,12 @@ public abstract class Actor implements Drawable {
     private Skeleton skeleton;
     private Cell cell;
     private int health = 10;
+    private int damage = 5;
+
+
+    public int getDamage() {
+        return damage;
+    }
 
     public Actor(Cell cell) {
         this.cell = cell;
@@ -16,7 +22,7 @@ public abstract class Actor implements Drawable {
 
     public void move(int dx, int dy) {
         Cell nextCell = cell.getNeighbor(dx, dy);
-        if (nextCell.getType() == CellType.WALL) {
+        if (nextCell.getType() == CellType.WALL || nextCell.getType() == CellType.SKELETON) { // mozna pozniej uzyc contains z listy przeciwnikow
             System.out.println("can't move!");
         } else if (nextCell.getType() == CellType.DOOR){
             System.out.println("I have to find a key first...");
@@ -26,10 +32,6 @@ public abstract class Actor implements Drawable {
             nextCell.setActor(this);
             cell = nextCell;
         }
-    }
-
-    public void pickTheItem(){
-
     }
 
     public int getHealth() {
